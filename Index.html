@@ -1,1 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Solver & Grade Converter</title>
+</head>
+<body>
+    <center>
+        <!-- Header -->
+        <h1> Math Solver & Grade Converter</h1>
+        <h3>Solve Quadratic equations and convert grades easily!</h3>
+        <hr>
+        <br>
 
+        <!-- Quadratic Equation Solver -->
+        <h2>Quadratic Equation Solver</h2>
+        <p><b>Solve: ax² + bx + c = 0</b></p>
+        
+        <table border="0" cellpadding="10">
+            <tr>
+                <td><b>Enter a:</b></td>
+                <td><input type="number" id="a" size="10" placeholder="1"></td>
+            </tr>
+            <tr>
+                <td><b>Enter b:</b></td>
+                <td><input type="number" id="b" size="10" placeholder="-3"></td>
+            </tr>
+            <tr>
+                <td><b>Enter c:</b></td>
+                <td><input type="number" id="c" size="10" placeholder="2"></td>
+            </tr>
+        </table>
+        
+        <br>
+        <button onclick="solveQuadratic()">Solve Equation</button>
+        <button onclick="clearQuadratic()">Clear</button>
+        <br><br>
+        
+        <div id="quadraticResult" style="border:2px solid blue; padding:15px; width:80%; background:#f0f8ff;">
+            <b>Enter values above to solve quadratic equation</b>
+        </div>
+
+        <br><br>
+        <hr>
+        <br>
+
+        <!-- Grade Converter -->
+        <h2>📊 Grade Converter</h2>
+        
+        <table border="0" cellpadding="10">
+            <tr>
+                <td><b>Enter score (0-100):</b></td>
+                <td><input type="number" id="score" size="10" placeholder="85" min="0" max="100"></td>
+            </tr>
+        </table>
+        
+        <br>
+        <button onclick="convertGrade()">Convert Grade</button>
+        <button onclick="clearGrade()">Clear</button>
+        <br><br>
+        
+        <div id="gradeResult" style="border:2px solid green; padding:15px; width:80%; background:#f0fff0;">
+            <b>Enter score above to see letter grade</b>
+        </div>
+
+        <br><br>
+
+        <!-- Grade Scale Table -->
+        <h3>📝 Grade Scale</h3>
+        <table border="1" cellpadding="8" cellspacing="0">
+            <tr bgcolor="#e6f7ff">
+                <th>Grade</th>
+                <th>Score Range</th>
+            </tr>
+            <tr>
+                <td><b>A+</b></td>
+                <td>85 - 100</td>
+            </tr>
+            <tr>
+                <td><b>A</b></td>
+                <td>75 - 84</td>
+            </tr>
+            <tr>
+                <td><b>B+</b></td>
+                <td>65 - 74</td>
+            </tr>
+            <tr>
+                <td><b>B</b></td>
+                <td>60 - 64</td>
+            </tr>
+            <tr>
+                <td><b>C+</b></td>
+                <td>55 - 59</td>
+            </tr>
+            <tr>
+                <td><b>C</b></td>
+                <td>50 - 54</td>
+            </tr>
+            <tr>
+                <td><b>D</b></td>
+                <td>0 - 49</td>
+            </tr>
+        </table>
+
+        <br><br>
+        <hr>
+        <p><i>Created for ICS Assignment</i></p>
+    </center>
+
+    <script>
+        // Quadratic Equation Solver - FIXED
+        function solveQuadratic() {
+            var a = parseFloat(document.getElementById('a').value);
+            var b = parseFloat(document.getElementById('b').value);
+            var c = parseFloat(document.getElementById('c').value);
+            var resultElement = document.getElementById('quadraticResult');
+            
+            // Check if inputs are valid numbers
+            if (isNaN(a) || isNaN(b) || isNaN(c)) {
+                resultElement.innerHTML = "<span style='color:red;'><b>❌ Please enter numbers for a, b, and c</b></span>";
+                resultElement.style.borderColor = "red";
+                resultElement.style.background = "#ffe6e6";
+                return;
+            }
+            
+            // Check if a is not zero
+            if (a === 0) {
+                resultElement.innerHTML = "<span style='color:red;'><b>❌ Coefficient 'a' cannot be zero</b></span>";
+                resultElement.style.borderColor = "red";
+                resultElement.style.background = "#ffe6e6";
+                return;
+            }
+            
+            // Calculate discriminant
+            var discriminant = b * b - 4 * a * c;
+            var resultText = "";
+            
+            if (discriminant > 0) {
+                var root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+                var root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+                resultText = "<span style='color:green;'><b>✅ Two real roots:</b></span><br><br>" +
+                            "<b>x₁ = " + root1.toFixed(2) + "</b><br>" +
+                            "<b>x₂ = " + root2.toFixed(2) + "</b>";
+                resultElement.style.borderColor = "green";
+                resultElement.style.background = "#f0fff0";
+            } else if (discriminant === 0) {
+                var root = -b / (2 * a);
+                resultText = "<span style='color:green;'><b>✅ One real root:</b></span><br><br>" +
+                            "<b>x = " + root.toFixed(2) + "</b>";
+                resultElement.style.borderColor = "green";
+                resultElement.style.background = "#f0fff0";
+            } else {
+                var realPart = (-b / (2 * a)).toFixed(2);
+                var imaginaryPart = (Math.sqrt(-discriminant) / (2 * a)).toFixed(2);
+                resultText = "<span style='color:blue;'><b>✅ Two complex roots:</b></span><br><br>" +
+                            "<b>x₁ = " + realPart + " + " + imaginaryPart + "i</b><br>" +
+                            "<b>x₂ = " + realPart + " - " + imaginaryPart + "i</b>";
+                resultElement.style.borderColor = "blue";
+                resultElement.style.background = "#f0f8ff";
+            }
+            
+            resultElement.innerHTML = resultText;
+        }
+        
+        // Grade Converter - FIXED
+        function convertGrade() {
+            var score = parseInt(document.getElementById('score').value);
+            var resultElement = document.getElementById('gradeResult');
+            
+            // Check if score is valid
+            if (isNaN(score) || score < 0 || score > 100) {
+                resultElement.innerHTML = "<span style='color:red;'><b>❌ Please enter score between 0-100</b></span>";
+                resultElement.style.borderColor = "red";
+                resultElement.style.background = "#ffe6e6";
+                return;
+            }
+            
+            // Determine grade
+            var grade, color;
+            if (score >= 85) {
+                grade = "A+"; color = "green";
+            } else if (score >= 75) {
+                grade = "A"; color = "green";
+            } else if (score >= 65) {
+                grade = "B+"; color = "orange";
+            } else if (score >= 60) {
+                grade = "B"; color = "orange";
+            } else if (score >= 55) {
+                grade = "C+"; color = "orange";
+            } else if (score >= 50) {
+                grade = "C"; color = "orange";
+            } else {
+                grade = "D"; color = "red";
+            }
+            
+            var resultText = "<span style='color:" + color + ";'><b>🎓 Your Grade: " + grade + "</b></span><br><br>" +
+                            "<b>Score: " + score + "/100</b><br>" +
+                            "<b>Letter Grade: " + grade + "</b>";
+            
+            resultElement.innerHTML = resultText;
+            resultElement.style.borderColor = color;
+            
+            // Set background color based on grade
+            if (color === "green") {
+                resultElement.style.background = "#f0fff0";
+            } else if (color === "orange") {
+                resultElement.style.background = "#fff8e6";
+            } else {
+                resultElement.style.background = "#ffe6e6";
+            }
+        }
+        
+        // Clear Functions - FIXED
+        function clearQuadratic() {
+            document.getElementById('a').value = '';
+            document.getElementById('b').value = '';
+            document.getElementById('c').value = '';
+            document.getElementById('quadraticResult').innerHTML = "<b>Enter values above to solve quadratic equation</b>";
+            document.getElementById('quadraticResult').style.borderColor = "blue";
+            document.getElementById('quadraticResult').style.background = "#f0f8ff";
+        }
+        
+        function clearGrade() {
+            document.getElementById('score').value = '';
+            document.getElementById('gradeResult').innerHTML = "<b>Enter score above to see letter grade</b>";
+            document.getElementById('gradeResult').style.borderColor = "green";
+            document.getElementById('gradeResult').style.background = "#f0fff0";
+        }
+    </script>
+</body>
+</html>
